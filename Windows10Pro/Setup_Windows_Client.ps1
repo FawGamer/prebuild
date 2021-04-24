@@ -10,23 +10,23 @@ $DownloadAtivador = 'https://mega.nz/file/484AVaLC#ccIQT0rY1ckw6-7i7s5kLgRakp-PP
 $DATA = date
 
 # InformaÃ§oes da Maquina
-$Host = Get-ComputerInfo -Property CsCaption
-$WindowsInfo = Get-ComputerInfo -Property WindowsProductName
-$WindowsVersion = Get-ComputerInfo -Property OsArchitecture
-$WindowsLanguage = Get-ComputerInfo -Property OsLanguage
-$Processador = Get-ComputerInfo -Property CsProcessors
-#$Memoria = Get-ComputerInfo -Property 
-$Graphics = wmic path win32_VideoController get name
+$HostName = Get-ComputerInfo -Property CsCaption
+$WinInfo = Get-ComputerInfo -Property WindowsProductName
+$WinVersion = Get-ComputerInfo -Property OsArchitecture
+$WinLanguage = Get-ComputerInfo -Property OsLanguage
+$WinProcessador = Get-ComputerInfo -Property CsProcessors
+#$WinMemoria = {Get-ComputerInfo -Property}
+$WinGraphics = wmic path win32_VideoController get name
 
-Start-Transcript >> C:\$Host.$DATA.log
-Write-Host "Inventario do Computador"
-$Host
-$WindowsInfo
-$WindowsVersion
-$WindowsLanguage
-$Processador
-#$Memoria
-$Graphics
+Start-Transcript -Path C:\StartAutoDeploy.txt -Append
+Write-Host "Inventario do Computador" 
+Write-Host "O nome do computador é " $HostName
+Write-Host "O Sistema Operacional instalado é: " $WinInfo
+Write-Host "A Versão: " $WinVersion
+Write-Host "Na Linguagem padrão "$WinLanguage
+Write-Host "Com base no processador: " $WinProcessador
+#$WinMemoria
+Write-Host "Com a placa de Video: " $WinGraphics
 
 $RedeEXT = (Test-Connection 8.8.8.8 -Count 3 -Quiet)
 if ($RedeEXT -eq "true"){
@@ -38,7 +38,11 @@ if ($RedeEXT -eq "true"){
     Write-Host "Iniciando Instalacao de Aplicativos"
 # SET  ACCEPT PERMISSION IN CHOCO
     choco feature enable -n=allowGlobalConfirmation
+# INSTALL CLEAN CACHE
+    choco install choco-cleaner
+    choco upgrade choco-cleaner
 
+# INSTALL APP DEFAULTS
     choco install anydesk.install -dvfy
     choco install silverlight -dvfy
     choco install dotnet4.7.2 -dvfy
@@ -59,9 +63,13 @@ if ($RedeEXT -eq "true"){
 
     Start-Process microsoftedge $DownloadOffice
     Start-Process microsoftedge $DownloadAtivador
-
+    choco install choco-cleaner
+    Stop-Transcript
+    exit
 }else{
     Write-Host "Maquina sem acesso a internet!" -ForegroundColor Red
+    Stop-Transcript
+    exit
 }
-Stop-Transcript
+
 
