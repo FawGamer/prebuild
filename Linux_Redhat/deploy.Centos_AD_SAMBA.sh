@@ -38,7 +38,6 @@ gpgcheck=0" >> /etc/yum.repos.d/tissamba.repos
 yum update -y
 yum upgrade -y
 
-
 # Pacotes
 yum install samba samba-winbind samba-winbind-clients samba-client krb5-workstation samba-tools -y
 
