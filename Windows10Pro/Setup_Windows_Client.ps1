@@ -20,10 +20,10 @@ $WinGraphics = wmic path win32_VideoController get name
 
 Start-Transcript -Path C:\StartAutoDeploy.txt -Append
 Write-Host "Inventario do Computador" 
-Write-Host "O nome do computador é " $HostName
-Write-Host "O Sistema Operacional instalado é: " $WinInfo
-Write-Host "A Versão: " $WinVersion
-Write-Host "Na Linguagem padrão "$WinLanguage
+Write-Host "O nome do computador ï¿½ " $HostName
+Write-Host "O Sistema Operacional instalado ï¿½: " $WinInfo
+Write-Host "A Versï¿½o: " $WinVersion
+Write-Host "Na Linguagem padrï¿½o "$WinLanguage
 Write-Host "Com base no processador: " $WinProcessador
 #$WinMemoria
 Write-Host "Com a placa de Video: " $WinGraphics
@@ -64,6 +64,10 @@ if ($RedeEXT -eq "true"){
     Start-Process microsoftedge $DownloadOffice
     Start-Process microsoftedge $DownloadAtivador
     choco install choco-cleaner
+    
+    Remove-Item C:\WINDOWS\TEMP\chocolatey\*
+    Remove-Item C:\C:\Programdata\chocolatey\lib\*
+    Remove-Item C:\Users\%UserProfile%\AppData\Local\Temp\chocolatey
     Stop-Transcript
     exit
 }else{
